@@ -1,0 +1,10 @@
+# Ignore SSH private keys
+*.pem
+
+# Ignore Terraform state files that may contain sensitive data
+*.tfstate
+*.tfstate.backup
+
+# Ignore local Terraform configuration files
+.terraform/
+.terraform.lock.hcl
