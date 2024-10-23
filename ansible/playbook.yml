@@ -1,0 +1,25 @@
+---
+- name: Configure Apache Web Server
+  hosts: webserver
+  become: true
+
+  tasks:
+    - name: Install Apache
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+
+    - name: Start and enable Apache
+      ansible.builtin.systemd:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: Copy and extract HTML, CSS, JS files
+      ansible.builtin.unarchive:
+        src: files/2131_wedding_lite.tar.gz
+        dest: /var/www/html/
+        remote_src: no
+        owner: apache
+        group: apache
+        mode: '0755'
