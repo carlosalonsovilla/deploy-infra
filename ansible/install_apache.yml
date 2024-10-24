@@ -5,21 +5,21 @@
 
   tasks:
     - name: Install Apache
-      ansible.builtin.yum:
+      yum:
         name: httpd
         state: present
 
     - name: Start and enable Apache
-      ansible.builtin.systemd:
+      systemd:
         name: httpd
         state: started
         enabled: true
 
     - name: Copy and extract HTML, CSS, JS files
-      ansible.builtin.unarchive:
+      unarchive:
         src: files/2131_wedding_lite.tar.gz
         dest: /var/www/html/
-        remote_src: no
+        remote_src: false
         owner: apache
         group: apache
         mode: '0755'

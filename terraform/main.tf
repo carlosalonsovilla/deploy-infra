@@ -1,3 +1,9 @@
+#Define Pulic IP variable
+variable "public_ip" {
+  description = "Public IP for local VM"
+  type = string
+}
+
 provider "aws" {
     region = "us-east-1"  
 }
@@ -27,7 +33,7 @@ resource "local_file" "private_key" {
   file_permission = "0400"
 }
 
-#Create a security group that allows SSH from your machine
+#Create a security group that allows SSH and HTTPS
 resource "aws_security_group" "ec2_ssh" {
   name = "Allow ssh"
   description = "Only allow ssh from my VM"
@@ -37,12 +43,12 @@ resource "aws_security_group" "ec2_ssh" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/32"] # Replace with your public IP
+    cidr_blocks = ["${var.public_ip}/32"] # Replace with your public IP
   }
 
   ingress {
-    from_port = 80
-    to_port = 80
+    from_port = 443
+    to_port = 443
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -63,7 +69,7 @@ resource "aws_instance" "my_ec2" {
   security_groups = [aws_security_group.ec2_ssh.name]
 
   tags = {
-    Name = "MyTerraformEC2"
+    Name = "myterraformec2"
   }
 }
 
